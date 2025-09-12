@@ -62,3 +62,7 @@ It create the following files:
 - `massdns_${domain_name}` with the DNS resolution for all the subdomains found for a particular domain
 - `netname` with the information discovered from censys about the certificate
 - `SPF` with the IPs or domains discovered from the SPF DNS record
+
+![Example output of the recon script](./images/sample_output.png)
+
+*Screenshot is sanitized and for demonstration only — no live targets or PII.*
