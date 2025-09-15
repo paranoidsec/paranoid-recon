@@ -13,9 +13,11 @@ It’s intended as a building block for recon during bug bounty, pentest, red te
 ## Features
 
 - Enumerates subdomains using multiple tools
+- Filter alive hosts
+- Scans alive hosts for open ports
 - *Work in progress*
-  - Filter alive hosts
   - Automate looking for web applications/services
+  - Scan with `nuclei` for known vulnerabilities
   - Produces output files ready for follow-up scanning
 
 ---
@@ -31,6 +33,7 @@ Install the following tools:
 - [jq](https://jqlang.org/)
 - [openssl](https://www.openssl.org/)
 - [curl](https://curl.se/docs/manpage.html)
+- [nmap](https://nmap.org/)
 
 On many Linux distros:
 
@@ -62,6 +65,10 @@ It create the following files:
 - `massdns_${domain_name}` with the DNS resolution for all the subdomains found for a particular domain
 - `netname` with the information discovered from censys about the certificate
 - `SPF` with the IPs or domains discovered from the SPF DNS record
+
+For the scan part it creates the following directory structure:
+- `scans` folder to store all the scans
+    - `nmap` folder with all the `nmap` scans with the name of the domain on the files
 
 ![Example output of the recon script](./images/sample_output.png)
 
