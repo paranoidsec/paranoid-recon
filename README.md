@@ -73,3 +73,14 @@ For the scan part it creates the following directory structure:
 ![Example output of the recon script](./images/sample_output.png)
 
 *Screenshot is sanitized and for demonstration only — no live targets or PII.*
+
+## Roadmap
+
+- [x] Subdomain enumeration
+- [x] Live host filtering
+- [x] Service discovery and vulnerability scanning
+- [ ] Scope monitoring (coming soon 🚀)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE)
