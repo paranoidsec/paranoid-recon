@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Get the information for a public program on yeswehack
+program="${1}"
+scope="scope.txt"
+subs="subs_enum"
+folder="${program}"
+
+# Store the information on his folder
+if [[ ! -d "${folder}" ]]; then
+	mkdir "${folder}" && cd "${folder}"
+else
+	cd "${folder}"
+fi
+
+# Get the information for the program
+curl -sO "https://api.yeswehack.com/programs/${program}"
+
+# Extract the scope
+jq -r '.scopes[]| select((.scope_type=="web-application") or (.scope_type=="api")).scope' "${program}" > "${scope}"
+
+# Remove http or https if it's on the scope
+sed -i 's/http[s]:\/\///' "${scope}"
+
+# Extract domains for subdomain enumeration
+grep -E '^\*' "${scope}" | sed 's/^\*\.//' > "${subs}"

@@ -79,7 +79,27 @@ For the scan part it creates the following directory structure:
 - [x] Subdomain enumeration
 - [x] Live host filtering
 - [x] Service discovery and vulnerability scanning
-- [ ] Scope monitoring (coming soon 🚀)
+- [x] Scope monitoring
+
+## Monitor (new in v0.3)
+
+ParanoidRecon now includes a **monitoring subsystem**, currently customized for **YesWeHack** bug bounty scopes.
+
+### What it does
+
+- Enumerates subdomains (`recon.sh`)
+- Compares with the previous run (`subdomains.bak`)
+- Outputs only the *newly discovered subdomains* (`new_subs`)
+- Sends a telegram notification (Optional)
+
+### Notes
+
+- ⚠️ Optimized for YesWeHack program scopes.  
+- Only shows **deltas** (new subdomains since last run).  
+- Use responsibly: only on domains you are authorized to test.  
+
+👉 See [monitor/](monitor/) for details and usage.
+
 
 ## License
 
