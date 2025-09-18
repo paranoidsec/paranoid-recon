@@ -28,6 +28,8 @@ sed -ne 's/^\( *\)Subject:/\1/p;/X509v3 Subject Alternative Name/{
         openssl s_client -ign_eof 2>/dev/null <<<$'HEAD / HTTP/1.0\r\n\r' \
             -connect $domain:443 ) ) | grep "DNS" | awk -F':' '{print $2}' | anew subdomains
 
+chaos -silent -d "$domain" | anew subdomains
+
 ## Sanitize the subdomains file with only the scope
 grep -Ev $(cat subs_enum | tr '\n' '|' | sed 's/|$//') subdomains |\
 	xargs -I{} -P1 sed -i '/{}/d' subdomains
