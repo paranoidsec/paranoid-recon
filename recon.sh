@@ -26,6 +26,9 @@ censys subdomains "$domain" | grep '-' | awk '{print $2}' | anew subdomains
 curl -s --compressed "https://rapiddns.io/subdomain/$domain?full=1" \
   | grep "^<td>" | grep "$domain" | grep -v target | sed -e 's/<td>//g' -e 's/<\/td>//g' | sort -u | anew subdomains
 
+## Use chaos cli to retrieve more subdomains
+chaos -silent -d "$domain" | anew subdomains
+
 ## Get subdomains from alternative names
 sed -ne 's/^\( *\)Subject:/\1/p;/X509v3 Subject Alternative Name/{
     N;s/^.*\n//;:a;s/^\( *\)\(.*\), /\1\2\n\1/;ta;p;q; }' < <(

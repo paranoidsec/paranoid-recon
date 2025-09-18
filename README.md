@@ -34,6 +34,7 @@ Install the following tools:
 - [openssl](https://www.openssl.org/)
 - [curl](https://curl.se/docs/manpage.html)
 - [nmap](https://nmap.org/)
+- [chaos](https://chaos.projectdiscovery.io/)
 
 On many Linux distros:
 
@@ -99,7 +100,6 @@ ParanoidRecon now includes a **monitoring subsystem**, currently customized for 
 - Use responsibly: only on domains you are authorized to test.  
 
 👉 See [monitor/](monitor/) for details and usage.
-
 
 ## License
 
