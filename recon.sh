@@ -1,7 +1,10 @@
 #!/bin/bash
 
 domain="$1"
+ppath="$(pwd)"
 scans_dir="scans"
+CHAOS_KEY="PDCP_API_KEY"
+censys_config="$HOME/.config/censys/censys.cfg"
 
 if [[ $# -ne 1 ]]; then
 	echo "Usage: $0 <domain>"
@@ -20,14 +23,29 @@ subfinder -silent -d "$domain" -all -m "$domain" | anew subdomains
 curl -s "https://crt.sh/json?q=$domain" | jq -r '.[].common_name' | sort -u | anew subdomains
 
 ## Use censys cli to retrieve subdomains
-censys subdomains "$domain" | grep '-' | awk '{print $2}' | anew subdomains
+if command -v censys &>/dev/null && [[ -f "${censys_config}" ]] && [[ ! -z "${censys_config}" ]]; then
+	censys subdomains "$domain" | grep '-' | awk '{print $2}' | anew subdomains
+	# Netname
+	## Create the file it doesn't exists
+	touch netname
+	## Use censys to get netname
+	organization=$(echo "${domain}" | unfurl format %r)
+	echo "${organization}" >> netname
+	censys search "services.tls.certificate.parsed.subject.organization: ${organization}" | jq -r '.[].ip' | xargs -I{} bash -c 'printf "%s - %s\n" {} "$(whois {} | grep netname)"'
+else
+	echo "[*] Censys skipped (binary or API key missing)"
+fi
 
 ## Use rapiddns to get more subdomains
 curl -s --compressed "https://rapiddns.io/subdomain/$domain?full=1" \
   | grep "^<td>" | grep "$domain" | grep -v target | sed -e 's/<td>//g' -e 's/<\/td>//g' | sort -u | anew subdomains
 
 ## Use chaos cli to retrieve more subdomains
-chaos -silent -d "$domain" | anew subdomains
+if command -v chaos &>/dev/null && env | grep "${CHAOS_KEY}" &>/dev/null; then
+    chaos -d "$domain" -silent | anew subdomains
+else
+    echo "[*] Chaos skipped (binary or API key missing)"
+fi
 
 ## Get subdomains from alternative names
 sed -ne 's/^\( *\)Subject:/\1/p;/X509v3 Subject Alternative Name/{
@@ -36,15 +54,9 @@ sed -ne 's/^\( *\)Subject:/\1/p;/X509v3 Subject Alternative Name/{
         openssl s_client -ign_eof 2>/dev/null <<<$'HEAD / HTTP/1.0\r\n\r' \
             -connect $domain:443 ) ) | grep "DNS" | awk -F':' '{print $2}' | grep "$domain" | anew subdomains
 
-# Netname
-## Create the file it doesn't exists
-touch netname
-## Use censys to get netname
-censys search "services.tls.certificate.parsed.subject.organization: $domain" | jq -r '.[].ip' | xargs -I{} bash -c 'printf "{} - "; whois {} | grep netname' > netname
-
 # Massdns
 ## Resolve domains with massdns
-massdns -r dictionaries/resolvers.txt -t A -q -o S -w massdns_"$domain" < subdomains
+massdns -r "${ppath}/dictionaries/resolvers.txt" -t A -q -o S -w massdns_"$domain" < subdomains
 
 # SPF
 touch SPF

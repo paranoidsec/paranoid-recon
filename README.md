@@ -19,12 +19,13 @@ It’s intended as a building block for recon during bug bounty, pentest, red te
   - Automate looking for web applications/services
   - Scan with `nuclei` for known vulnerabilities
   - Produces output files ready for follow-up scanning
+  - Use dns bruteforcing to find more hosts
 
 ---
 
 ## Requirements
 
-Install the following tools:
+The script makes use of the following tools:
 - [assetfinder](https://github.com/tomnomnom/assetfinder)
 - [subfinder](https://github.com/projectdiscovery/subfinder)
 - [censys](https://censys-python.readthedocs.io/en/stable/quick-start.html)
@@ -35,14 +36,58 @@ Install the following tools:
 - [curl](https://curl.se/docs/manpage.html)
 - [nmap](https://nmap.org/)
 - [chaos](https://chaos.projectdiscovery.io/)
+- [go](https://go.dev/)
 
-On many Linux distros:
+Install `go` on your system, usually you can find it on the official repository for your distro:
 
 ```bash
-# For the go tools
+# Debian based
+## Official package
+sudo apt install golang
+## Snap repository
+sudo snap install go --classic
+
+# Arch Linux based
+sudo pacman -S go
+```
+
+Or you can use the official installation from the [Go Webpage](https://go.dev/doc/install).
+
+Once you have go installed, be sure to add the folder for the binaries to your path. To do edit the `$HOME/.bashrc` or `$HOME/.zshrc` file and add the following:
+
+```bash
+GOPATH="$HOME/go"
+if ! [[ $PATH =~ "$GOPATH" ]]; then
+  export PATH="$PATH:$GOPATH/bin"
+fi
+```
+
+Once everything is configured, you can start to install the tools:
+
+```bash
+# Go tools
+## Assetfinder
+go install github.com/tomnomnom/assetfinder@latest
+## Anew
+go install github.com/tomnomnom/anew@latest
+## Subfinder
 go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-# Install from the official repositories of your Linux distribution
-sudo apt install curl
+## Chaos
+go install github.com/projectdiscovery/chaos-client/cmd/chaos@latest
+# Censys
+pipx install censys
+# Massdns
+git clone https://github.com/blechschmidt/massdns && cd massdns && make
+```
+
+For the rest of the tools you can install them from the official repositories:
+
+```bash
+# Debian based
+sudo apt install -y jq curl openssl nmap
+
+# Arch based
+sudo pacman -S jq curl openssl nmap
 ```
 
 ## Usage
@@ -81,6 +126,8 @@ For the scan part it creates the following directory structure:
 - [x] Live host filtering
 - [x] Service discovery and vulnerability scanning
 - [x] Scope monitoring
+- [ ] Add `--bruteforce` option to find hosts based on DNS bruteforcing
+- [ ] Installation script
 
 ## Monitor (new in v0.3)
 
