@@ -23,87 +23,39 @@ It’s intended as a building block for recon during bug bounty, pentest, red te
 
 ---
 
-## Requirements
+## Quick Start
 
-The script makes use of the following tools:
+### Requirements
+
+Make sure you have the following tools installed and in your `$PATH`:
 - [assetfinder](https://github.com/tomnomnom/assetfinder)
 - [subfinder](https://github.com/projectdiscovery/subfinder)
-- [censys](https://censys-python.readthedocs.io/en/stable/quick-start.html)
 - [massdns](https://github.com/blechschmidt/massdns)
 - [anew](https://github.com/tomnomnom/anew)
 - [jq](https://jqlang.org/)
 - [openssl](https://www.openssl.org/)
 - [curl](https://curl.se/docs/manpage.html)
 - [nmap](https://nmap.org/)
-- [chaos](https://chaos.projectdiscovery.io/)
-- [go](https://go.dev/)
+- (Optional) [censys](https://censys-python.readthedocs.io/en/stable/quick-start.html) **Requires paid API key**
+- (Optional) [chaos](https://chaos.projectdiscovery.io/) **Requires paid API key**
 
-Install `go` on your system, usually you can find it on the official repository for your distro:
+### Run
 
-```bash
-# Debian based
-## Official package
-sudo apt install golang
-## Snap repository
-sudo snap install go --classic
-
-# Arch Linux based
-sudo pacman -S go
-```
-
-Or you can use the official installation from the [Go Webpage](https://go.dev/doc/install).
-
-Once you have go installed, be sure to add the folder for the binaries to your path. To do edit the `$HOME/.bashrc` or `$HOME/.zshrc` file and add the following:
+Clone the repo and scan the domain you want:
 
 ```bash
-GOPATH="$HOME/go"
-if ! [[ $PATH =~ "$GOPATH" ]]; then
-  export PATH="$PATH:$GOPATH/bin"
-fi
-```
-
-Once everything is configured, you can start to install the tools:
-
-```bash
-# Go tools
-## Assetfinder
-go install github.com/tomnomnom/assetfinder@latest
-## Anew
-go install github.com/tomnomnom/anew@latest
-## Subfinder
-go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-## Chaos
-go install github.com/projectdiscovery/chaos-client/cmd/chaos@latest
-# Censys
-pipx install censys
-# Massdns
-git clone https://github.com/blechschmidt/massdns && cd massdns && make
-```
-
-For the rest of the tools you can install them from the official repositories:
-
-```bash
-# Debian based
-sudo apt install -y jq curl openssl nmap
-
-# Arch based
-sudo pacman -S jq curl openssl nmap
-```
-
-## Usage
-
-```bash
+git clone https://github.com/paranoidsec/paranoid-recon.git && cd paranoid-recon
 chmod +x recon.sh
-# Enumerate subdomains for one domain only
 ./recon.sh example.com
-# Enumerate subdomains for a list of domains
-cat domains | xargs -I{} -P1 ./recon.sh {}
 ```
 
 ### Example
 
 ```bash
+# Enumerate one domain
 ./recon.sh hackerone.com
+# Enumerate subdomains for a list of domains
+cat domains | xargs -I{} -P1 ./recon.sh {}
 ```
 
 It create the following files:
