@@ -44,7 +44,7 @@ censys search "services.tls.certificate.parsed.subject.organization: $domain" | 
 
 # Massdns
 ## Resolve domains with massdns
-massdns -r /home/artic/Documents/BugBounty/dictionaries/resolvers.txt -t A -q -o S -w massdns_"$domain" < subdomains
+massdns -r dictionaries/resolvers.txt -t A -q -o S -w massdns_"$domain" < subdomains
 
 # SPF
 touch SPF
