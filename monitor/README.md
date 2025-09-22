@@ -5,17 +5,19 @@ This is a monitoring subsystem designed to automate recon for **YesWeHack bug bo
 ## What it does
 
 1. Reads targets from `config/programs.txt`
-2. Runs subdomain enumeration (`recon.sh`)
+2. Runs subdomain enumeration with [recon.sh](../recon.sh) via symbolic link
 3. Store the results on the `subdomains` file and compares with the previous scan
-4. Computes deltas -> store the new subdomains on the `new_subs`
+4. Computes deltas -> store the new subdomains on the `newhosts`
 5. (Optional) Sends alerts via Telegram bot
-6. Includes a GitHub Actions workflow for daily runs
 
 ## Notes
 
 - ⚠️ Currently optimized for YesWeHack platform scopes.  
 - Adaptation needed for other platforms (HackerOne, Intigriti, etc.).  
 - Use responsibly: only on scopes you are authorized to monitor.  
+
+**Note**: The monitor uses a symbolic link to `../recon.sh`.
+On Windows, clone with `git clone -c core.symlinks=true ...` or replace with a copy of `recon.sh`.
 
 ## Quick start
 

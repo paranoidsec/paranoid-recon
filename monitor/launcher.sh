@@ -3,6 +3,8 @@
 # Global variables
 enum_subs="subs_enum"
 subs="subdomains"
+oldsubs="subdomains_old"
+newhosts="newhosts"
 
 # Load scripts functions
 source scripts/telegram_notify.sh
@@ -16,18 +18,10 @@ while read -r program; do
 	cd "${program}"
 	# If the subs_enum exists enumerate subdomains
 	if [[ -f "${enum_subs}" ]]; then
-		# If subdomains file exists make a backup
-		if [[ -f "${subs}" ]]; then
-			mv "${subs}" "${subs}.bak"
-		fi
 		cat "${enum_subs}" | xargs -I{} "../scripts/recon.sh" {}
 	fi
 done < config/programs
 
-if [[ -f "${subs}.bak" ]]; then
-	diff_subs=$(diff <(sort -u "${subs}.bak") <(sort -u "${subs}") | grep '>' | awk '{print $2}')
-	if [[ "${diff_subs}" ]]; then
-		sendMessage "${diff_subs}"
-		echo "${diff_subs}" > new_subs
-	fi
+if [[ -f "${newhosts}" ]]; then
+	sendMessage "${newhosts}"
 fi

@@ -13,7 +13,11 @@ fi
 
 # Subdomains
 ## Create the file subdomains if it doesn't exists
-touch subdomains
+if [[ -f subdomains ]]; then
+	mv subdomains subdomains_old
+else
+	touch subdomains
+fi
 
 ## Enumerate subdomains with assetfinder and subfinder
 echo "$domain" | assetfinder --subs-only | anew subdomains
@@ -65,6 +69,11 @@ dig +short TXT "$domain" | grep spf | sed 's/ /\n/g' | grep 'ip' | awk -F':' '{p
 
 # Clean the subdomains found
 sed -i '/^\*\./d' subdomains
+
+# Get the new subdomains found
+if [[ -f subdomains_old ]]; then
+	comm -13 subdomains_old subdomains > newhosts
+fi
 
 # Create directories structure
 if [[ ! -d "${scans_dir}" ]]; then
