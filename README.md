@@ -83,6 +83,15 @@ For the scan part it creates the following directory structure:
 
 > For the actionable task list and execution priorities, see [TODO.md](TODO.md).
 
+---
+
+**Development Roadmap**
+You can follow ongoing progress and upcoming features in the public project board:
+[Development Roadmap](https://github.com/users/paranoidsec/projects/3)
+
+---
+
+
 ## Monitor (new in v0.3)
 
 ParanoidRecon now includes a **monitoring subsystem**, currently customized for **YesWeHack** bug bounty scopes.
