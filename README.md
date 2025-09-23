@@ -81,6 +81,8 @@ For the scan part it creates the following directory structure:
 - [ ] Add `--bruteforce` option to find hosts based on DNS bruteforcing
 - [ ] Installation script
 
+> For the actionable task list and execution priorities, see [TODO.md](TODO.md).
+
 ## Monitor (new in v0.3)
 
 ParanoidRecon now includes a **monitoring subsystem**, currently customized for **YesWeHack** bug bounty scopes.
